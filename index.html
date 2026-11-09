@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#10131c">
+<title>Little Worlds — Falling Sand Sandbox</title>
+<style>
+:root{color-scheme:dark;--bg:#10131c;--panel:#191e2a;--line:#2b3242;--text:#edf0fa;--muted:#8c96aa;--accent:#a9ef71;--gold:#ffcc70}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#242c3d 0%,var(--bg) 58%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);display:flex;justify-content:center;padding:22px 18px 30px}
+.app{width:min(1100px,100%)}.topbar{display:flex;align-items:center;justify-content:space-between;margin:0 2px 18px}.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#c1fa83,#78d7a1);font-size:23px;box-shadow:0 6px 24px #a9ef7130}.eyebrow{font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:800;text-transform:uppercase}.brand h1{font-size:21px;line-height:1.15;margin:2px 0 0;letter-spacing:-.04em}.top-note{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}.live-dot{height:7px;width:7px;border-radius:50%;background:#a9ef71;box-shadow:0 0 10px #a9ef71}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:14px;align-items:start}.stage,.panel{border:1px solid var(--line);border-radius:16px;background:#171c27e8;box-shadow:0 18px 60px #0003}.stage{overflow:hidden}.stage-head{height:53px;padding:0 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.scene-name{font-weight:700;font-size:13px}.scene-caption{font-size:11px;color:var(--muted);margin-top:3px}.stage-tools{display:flex;gap:7px}.icon-btn,.action-btn{border:1px solid #343c4e;color:#dfe4f1;background:#202635;border-radius:9px;cursor:pointer;font:inherit;transition:.15s}.icon-btn{width:34px;height:32px;font-size:15px}.icon-btn:hover,.action-btn:hover{border-color:#a9ef71;color:#a9ef71;transform:translateY(-1px)}.icon-btn.active{color:#a9ef71;border-color:#789f5d;background:#293626}
+.canvas-wrap{position:relative;background:#0d1119;touch-action:none;cursor:crosshair;line-height:0}canvas{display:block;width:100%;height:auto;image-rendering:pixelated;touch-action:none}.canvas-hint{position:absolute;bottom:12px;left:13px;padding:6px 9px;border-radius:7px;background:#111722c9;color:#9da7b9;font-size:10px;line-height:1.3;pointer-events:none;backdrop-filter:blur(6px)}.canvas-hint b{color:#dce4f2}.stage-foot{height:44px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.status{display:flex;gap:8px;align-items:center}.status-dot{height:6px;width:6px;border-radius:50%;background:var(--accent)}
+.panel{padding:16px}.section-title{font-size:10px;color:#8f9bb0;letter-spacing:.14em;text-transform:uppercase;font-weight:800;margin:1px 0 11px}.material-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.material{height:66px;background:#202635;border:1px solid #30394a;border-radius:11px;color:var(--text);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:.15s;position:relative;font:inherit}.material:hover{background:#282f40;transform:translateY(-1px)}.material.selected{border-color:#a9ef71;box-shadow:inset 0 0 0 1px #a9ef7145;background:#263229}.swatch{width:17px;height:17px;border-radius:5px;box-shadow:inset 0 1px 3px #ffffff50,0 2px 5px #0005}.mat-label{font-size:10px;color:#c5ccda}.material.selected .mat-label{color:#d8f6c4}.divider{height:1px;background:var(--line);margin:16px 0}.control-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#c3cada;margin:13px 0 8px}.value{color:var(--accent);font-variant-numeric:tabular-nums}.range{width:100%;accent-color:#a9ef71;height:4px;cursor:pointer}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.action-btn{padding:10px 8px;font-size:11px;font-weight:700}.action-btn.primary{background:#a9ef71;color:#162012;border-color:#a9ef71}.action-btn.primary:hover{background:#baf991;color:#162012}.action-btn.wide{grid-column:span 2}.presets{display:grid;grid-template-columns:1fr 1fr;gap:7px}.preset{border:1px solid #30394a;border-radius:9px;background:#202635;color:#cbd2e0;padding:9px 7px;font:inherit;font-size:10px;cursor:pointer;text-align:left}.preset:hover{border-color:#627b56;color:#d9f3c7}.preset span{font-size:14px;margin-right:5px}.tips{color:#929caf;font-size:10px;line-height:1.55}.tips strong{color:#cbd5e6;font-weight:600}.bottom-note{text-align:center;color:#596477;font-size:10px;padding-top:13px}
+@media(max-width:760px){body{padding:12px 10px 20px}.topbar{margin-bottom:12px}.layout{grid-template-columns:1fr}.panel{padding:13px}.panel-body{display:grid;grid-template-columns:1fr 1fr;gap:0 15px}.panel-body .materials-block{grid-column:1/-1}.panel-body .divider{grid-column:1/-1;margin:13px 0}.top-note{font-size:10px}.stage-head{height:48px}.stage-foot{height:39px}.canvas-hint{bottom:8px;left:8px;font-size:9px}}
+@media(max-width:420px){.top-note span:last-child{display:none}.brand h1{font-size:19px}.panel-body{grid-template-columns:1fr}.panel-body .materials-block,.panel-body .divider{grid-column:auto}.material-grid{grid-template-columns:repeat(6,1fr)}.material{height:58px}.mat-label{font-size:9px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="topbar"><div class="brand"><div class="logo">✳</div><div><div class="eyebrow">A tiny physics playground</div><h1>Little Worlds</h1></div></div><div class="top-note"><i class="live-dot"></i><span>Make a mess. See what happens.</span></div></header>
+<div class="layout">
+<section class="stage" aria-label="Sandbox">
+<div class="stage-head"><div><div class="scene-name" id="sceneName">Untitled world</div><div class="scene-caption">A pocket-sized particle playground</div></div><div class="stage-tools"><button class="icon-btn" id="pauseBtn" title="Pause (Space)" aria-label="Pause">Ⅱ</button><button class="icon-btn" id="stepBtn" title="Step once" aria-label="Step once">▸</button><button class="icon-btn" id="soundBtn" title="Toggle sound" aria-label="Toggle sound">♪</button></div></div>
+<div class="canvas-wrap"><canvas id="world" aria-label="Draw materials in the sandbox"></canvas><div class="canvas-hint"><b>Drag</b> to draw · <b>Right-click</b> to erase<br><b>Space</b> pause · <b>1–6</b> select material</div></div>
+<div class="stage-foot"><div class="status"><i class="status-dot" id="runDot"></i><span id="runText">Simulation running</span></div><span id="particleCount">0 particles</span></div>
+</section>
+<aside class="panel"><div class="panel-body">
+<div class="materials-block"><h2 class="section-title">Materials</h2><div class="material-grid" id="materials"></div></div>
+<div class="divider"></div>
+<div><h2 class="section-title">Brush</h2><div class="control-row"><label for="size">Size</label><span class="value" id="sizeValue">5 px</span></div><input class="range" id="size" type="range" min="1" max="18" value="5"><div class="control-row"><label for="density">Flow</label><span class="value" id="densityValue">100%</span></div><input class="range" id="density" type="range" min="15" max="100" value="100"></div>
+<div class="divider"></div>
+<div><h2 class="section-title">World tools</h2><div class="actions"><button class="action-btn primary" id="clearBtn">↻ &nbsp;New world</button><button class="action-btn" id="fillBtn">▰ &nbsp;Floor</button><button class="action-btn wide" id="rainBtn">☂ &nbsp;Make it rain</button></div></div>
+<div class="divider"></div>
+<div><h2 class="section-title">Quick starts</h2><div class="presets"><button class="preset" data-scene="hourglass"><span>⌛</span>Hourglass</button><button class="preset" data-scene="garden"><span>🌱</span>Garden</button><button class="preset" data-scene="campfire"><span>🔥</span>Campfire</button><button class="preset" data-scene="waterfall"><span>🌊</span>Waterfall</button></div></div>
+<div class="divider"></div><div class="tips"><strong>Try this:</strong> pour sand into water, then plant seeds. Fire spreads through wood, and water puts it out. Use the floor tool to give your world somewhere to land.</div>
+</div></aside>
+</div><div class="bottom-note">Every little particle has somewhere to go.</div>
+</main>
+<script>
+const canvas=document.getElementById('world'),ctx=canvas.getContext('2d',{alpha:false});
+const W=200,H=120,N=W*H;
+const EMPTY=0,SAND=1,WATER=2,STONE=3,WOOD=4,FIRE=5,SEED=6,PLANT=7;
+const mats=[
+ {id:SAND,name:'Sand',color:'#e9bd67',swatch:'linear-gradient(135deg,#f3d288,#c98c43)'},
+ {id:WATER,name:'Water',color:'#51b9e8',swatch:'linear-gradient(135deg,#7ce2f5,#3689df)'},
+ {id:STONE,name:'Stone',color:'#8994a6',swatch:'linear-gradient(135deg,#b2bdca,#606979)'},
+ {id:WOOD,name:'Wood',color:'#aa7048',swatch:'linear-gradient(135deg,#d49a60,#75432d)'},
+ {id:FIRE,name:'Fire',color:'#ff754d',swatch:'linear-gradient(135deg,#ffe16d,#f34f48)'},
+ {id:SEED,name:'Seed',color:'#92cc68',swatch:'linear-gradient(135deg,#d0e97a,#518e4b)'}
+];
+let cells=new Uint8Array(N),variation=new Uint8Array(N),age=new Uint8Array(N),processed=new Uint8Array(N);
+let selected=SAND,brush=5,density=100,running=true,painting=false,erase=false,lastPoint=null,frame=0,particles=0,soundOn=false,audioCtx=null;
+function playTone(){if(!soundOn)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=180+selected*55;gain.gain.setValueAtTime(.035,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.09);osc.connect(gain);gain.connect(audioCtx.destination);osc.start();osc.stop(audioCtx.currentTime+.09)}catch(_){}}
+const image=ctx.createImageData(W,H),pixels=image.data;
+const nameById=Object.fromEntries(mats.map(m=>[m.id,m.name]));
+function index(x,y){return y*W+x} function inside(x,y){return x>=0&&x<W&&y>=0&&y<H}
+function setCell(x,y,type){if(!inside(x,y))return;const i=index(x,y);cells[i]=type;variation[i]=Math.random()*32;age[i]=type===FIRE?12+Math.random()*18:0}
+function swap(a,b){const t=cells[a];cells[a]=cells[b];cells[b]=t;let v=variation[a];variation[a]=variation[b];variation[b]=v;let ag=age[a];age[a]=age[b];age[b]=ag;processed[a]=1;processed[b]=1}
+function clearWorld(){cells.fill(0);age.fill(0);particles=0;setScene('Untitled world')}
+function setScene(name){document.getElementById('sceneName').textContent=name}
+function countParticles(){let n=0;for(let i=0;i<N;i++)if(cells[i])n++;particles=n}
+function paintAt(x,y,type=selected){const r=Math.max(1,Math.round(brush/2));for(let oy=-r;oy<=r;oy++)for(let ox=-r;ox<=r;ox++){if(ox*ox+oy*oy>r*r)continue;if(Math.random()*100>density)continue;const px=x+ox,py=y+oy;if(!inside(px,py))continue;setCell(px,py,erase?EMPTY:type)}}
+function drawLine(a,b){if(!a){paintAt(b.x,b.y);return}const dx=b.x-a.x,dy=b.y-a.y,steps=Math.max(Math.abs(dx),Math.abs(dy),1);for(let i=0;i<=steps;i++){const t=i/steps;paintAt(Math.round(a.x+dx*t),Math.round(a.y+dy*t))}}
+function moveDown(i,x,y,diagonal=true){if(y+1>=H)return false;const below=i+W;if(cells[below]===EMPTY){swap(i,below);return true}if(cells[below]===WATER&&cells[i]===SAND){swap(i,below);return true}if(diagonal){const d=Math.random()<.5?-1:1;for(const dx of [d,-d]){const nx=x+dx;if(!inside(nx,y+1))continue;const ni=index(nx,y+1);if(cells[ni]===EMPTY){swap(i,ni);return true}if(cells[ni]===WATER&&cells[i]===SAND){swap(i,ni);return true}}}return false}
+function update(){processed.fill(0);frame++;const dir=frame%2?1:-1;
+ for(let y=H-1;y>=0;y--){const start=dir===1?0:W-1,end=dir===1?W:-1;for(let x=start;x!==end;x+=dir){const i=index(x,y),type=cells[i];if(!type||processed[i])continue;processed[i]=1;
+  if(type===SAND){if(moveDown(i,x,y))continue}
+  else if(type===WATER){if(moveDown(i,x,y))continue;const d=Math.random()<.5?-1:1;if(inside(x+d,y)&&cells[index(x+d,y)]===EMPTY){swap(i,index(x+d,y));continue}if(Math.random()<.27&&inside(x-d,y)&&cells[index(x-d,y)]===EMPTY){swap(i,index(x-d,y));continue}}
+  else if(type===SEED){if(moveDown(i,x,y))continue;let watered=false;for(let dx=-1;dx<=1;dx++){if(inside(x+dx,y+1)&&cells[index(x+dx,y+1)]===WATER)watered=true}if(watered&&Math.random()<.04){cells[i]=PLANT;variation[i]=Math.random()*20}}
+  else if(type===FIRE){age[i]--;if(age[i]<=0||y===0&&Math.random()<.18){cells[i]=EMPTY;continue}for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){if(!dx&&!dy)continue;const nx=x+dx,ny=y+dy;if(!inside(nx,ny))continue;const ni=index(nx,ny);if(cells[ni]===WATER){cells[i]=EMPTY;cells[ni]=EMPTY;break}if((cells[ni]===WOOD||cells[ni]===PLANT)&&Math.random()<.055){cells[ni]=FIRE;age[ni]=13+Math.random()*20}}if(cells[i]!==FIRE)continue;if(y>0&&Math.random()<.36){const ni=index(x,y-1);if(cells[ni]===EMPTY){swap(i,ni);continue}}}
+  else if(type===PLANT){if(Math.random()<.025){const nx=x+(Math.random()<.5?-1:1),ny=y-1;if(inside(nx,ny)&&cells[index(nx,ny)]===EMPTY&&Math.random()<.5)setCell(nx,ny,PLANT)}}
+ }}
+}
+function render(){let alive=0;for(let i=0;i<N;i++){const t=cells[i],p=i*4;if(!t){pixels[p]=13;pixels[p+1]=17;pixels[p+2]=25;pixels[p+3]=255;continue}alive++;let color;
+ switch(t){case SAND:color=[233,189,103];break;case WATER:color=[65,169,224];break;case STONE:color=[125,137,156];break;case WOOD:color=[158,99,59];break;case FIRE:color=age[i]>14?[255,130,56]:[255,78,45];break;case SEED:color=[143,190,89];break;case PLANT:color=[75,167,89];break;default:color=[255,255,255]}
+ const shade=variation[i]||0;pixels[p]=Math.min(255,color[0]+shade-14);pixels[p+1]=Math.min(255,color[1]+shade-14);pixels[p+2]=Math.min(255,color[2]+shade-14);pixels[p+3]=255;
+ }particles=alive;ctx.putImageData(image,0,0);document.getElementById('particleCount').textContent=alive.toLocaleString()+' particles'}
+canvas.width=W;canvas.height=H;
+const materialRoot=document.getElementById('materials');
+mats.forEach((m,n)=>{const b=document.createElement('button');b.className='material'+(n===0?' selected':'');b.dataset.id=m.id;b.innerHTML='<i class="swatch" style="background:'+m.swatch+'"></i><span class="mat-label">'+m.name+'</span>';b.addEventListener('click',()=>selectMaterial(m.id));materialRoot.appendChild(b)});
+function selectMaterial(id){selected=id;erase=false;document.querySelectorAll('.material').forEach(b=>b.classList.toggle('selected',Number(b.dataset.id)===id))}
+function pointerCell(ev){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(W-1,Math.floor((ev.clientX-r.left)/r.width*W))),y:Math.max(0,Math.min(H-1,Math.floor((ev.clientY-r.top)/r.height*H)))}}
+canvas.addEventListener('pointerdown',ev=>{ev.preventDefault();canvas.setPointerCapture(ev.pointerId);painting=true;erase=ev.button===2;if(!erase)erase=false;lastPoint=pointerCell(ev);paintAt(lastPoint.x,lastPoint.y);if(!erase)playTone()});
+canvas.addEventListener('pointermove',ev=>{if(!painting)return;const p=pointerCell(ev);drawLine(lastPoint,p);lastPoint=p});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>{painting=false;lastPoint=null});
+canvas.addEventListener('contextmenu',ev=>ev.preventDefault());
+document.getElementById('size').addEventListener('input',ev=>{brush=Number(ev.target.value);document.getElementById('sizeValue').textContent=brush+' px'});
+document.getElementById('density').addEventListener('input',ev=>{density=Number(ev.target.value);document.getElementById('densityValue').textContent=density+'%'});
+function togglePause(){running=!running;document.getElementById('pauseBtn').textContent=running?'Ⅱ':'▶';document.getElementById('pauseBtn').classList.toggle('active',!running);document.getElementById('runText').textContent=running?'Simulation running':'Simulation paused';document.getElementById('runDot').style.background=running?'var(--accent)':'#ffcc70'}
+document.getElementById('pauseBtn').addEventListener('click',togglePause);
+document.getElementById('stepBtn').addEventListener('click',()=>{if(!running){update();render()}});
+document.getElementById('clearBtn').addEventListener('click',()=>{clearWorld();render()});
+document.getElementById('fillBtn').addEventListener('click',()=>{for(let x=0;x<W;x++)for(let y=H-7;y<H;y++)setCell(x,y,STONE);setScene('A solid foundation')});
+document.getElementById('rainBtn').addEventListener('click',()=>{for(let n=0;n<460;n++){const x=Math.floor(Math.random()*W),y=Math.floor(Math.random()*28);if(cells[index(x,y)]===EMPTY)setCell(x,y,selected===STONE?SAND:selected)}setScene('A little shower')});
+document.getElementById('soundBtn').addEventListener('click',ev=>{soundOn=!soundOn;ev.currentTarget.classList.toggle('active',soundOn);ev.currentTarget.title=soundOn?'Sound on':'Sound off'});
+function putCircle(cx,cy,r,type){for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++)if(x*x+y*y<=r*r)setCell(cx+x,cy+y,type)}
+function loadScene(kind){cells.fill(0);age.fill(0);const floor=H-5;for(let x=0;x<W;x++)for(let y=floor;y<H;y++)setCell(x,y,STONE);
+ if(kind==='hourglass'){setScene('Hourglass');for(let y=12;y<63;y++)for(let x=48;x<152;x++)if(Math.abs(x-100)<(y<37?48-(y-12)*.95:24+(y-37)*.95))setCell(x,y,WOOD);for(let y=18;y<53;y++)for(let x=71;x<129;x++)if(Math.abs(x-100)<(y<35?(y-18)*1.3: (53-y)*1.3))setCell(x,y,SAND);for(let x=48;x<152;x++)setCell(x,63,WOOD);}
+ if(kind==='garden'){setScene('Tiny garden');for(let x=0;x<W;x++)for(let y=floor-3;y<floor;y++)setCell(x,y,SAND);for(let n=0;n<80;n++)setCell(18+Math.random()*164|0,floor-4,SEED);for(let x=24;x<86;x++)for(let y=82;y<floor-3;y++)if(Math.random()<.54)setCell(x,y,WATER);}
+ if(kind==='campfire'){setScene('Campfire');for(let x=79;x<122;x++){setCell(x,floor-1,WOOD)}for(let n=0;n<30;n++)putCircle(100,floor-4,n%3+1,FIRE);for(let x=68;x<83;x++)setCell(x,floor-2,WOOD);for(let x=118;x<133;x++)setCell(x,floor-2,WOOD);}
+ if(kind==='waterfall'){setScene('Waterfall');for(let x=22;x<178;x++)if(x<44||x>155)for(let y=48;y<H;y++)setCell(x,y,STONE);for(let x=44;x<156;x++)for(let y=floor-2;y<floor;y++)setCell(x,y,STONE);for(let x=78;x<122;x++)for(let y=8;y<55;y++)setCell(x,y,WATER);for(let x=60;x<140;x++)for(let y=66;y<floor-2;y++)if(Math.random()<.72)setCell(x,y,WATER);}
+ countParticles();render()}
+document.querySelectorAll('.preset').forEach(b=>b.addEventListener('click',()=>loadScene(b.dataset.scene)));
+window.addEventListener('keydown',ev=>{if(ev.code==='Space'){ev.preventDefault();togglePause()}if(ev.key>='1'&&ev.key<='6')selectMaterial(mats[Number(ev.key)-1].id);if(ev.key==='Escape'){clearWorld();render()}});
+function loop(){if(running)update();render();requestAnimationFrame(loop)}
+loadScene('hourglass');requestAnimationFrame(loop);
+</script>
+</body>
+</html>
